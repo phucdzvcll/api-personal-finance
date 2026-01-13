@@ -65,4 +65,7 @@ async function bootstrap() {
   await app.listen(port);
   console.log(`Application is running on: http://localhost:${port}/${apiPrefix}`);
 }
-bootstrap();
+void bootstrap().catch((error: unknown) => {
+  console.error("Failed to start application:", error);
+  process.exit(1);
+});

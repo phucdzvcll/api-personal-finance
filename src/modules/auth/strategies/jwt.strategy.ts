@@ -17,7 +17,6 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     private readonly usersService: UsersService
   ) {
     const jwtSecret: string = configService.get<string>("jwt.secret") || "";
-    const jwtExpiresIn: string = configService.get<string>("jwt.expiresIn") || "7d";
 
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),

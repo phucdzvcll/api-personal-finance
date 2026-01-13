@@ -135,7 +135,8 @@ export class AuthService {
           createdAt: user.createdAt,
         },
       };
-    } catch (error) {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    } catch (_error) {
       throw new UnauthorizedException("Invalid refresh token");
     }
   }

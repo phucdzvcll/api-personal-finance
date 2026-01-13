@@ -2,8 +2,15 @@ import { Injectable, UnauthorizedException } from "@nestjs/common";
 import { PassportStrategy } from "@nestjs/passport";
 import { ExtractJwt, Strategy } from "passport-jwt";
 import { ConfigService } from "@nestjs/config";
+import { Request } from "express";
 import { UsersService } from "../../users/users.service";
 import { UserEntity } from "../../users/entities/user.entity";
+
+interface RefreshTokenRequestBody {
+  refreshToken?: string;
+}
+
+type RequestWithBody = Request<unknown, unknown, RefreshTokenRequestBody>;
 
 export interface JwtRefreshPayload {
   sub: number;
@@ -27,12 +34,12 @@ export class JwtRefreshStrategy extends PassportStrategy(Strategy, "jwt-refresh"
     });
   }
 
-  async validate(req: any, payload: JwtRefreshPayload): Promise<UserEntity> {
+  async validate(req: RequestWithBody, payload: JwtRefreshPayload): Promise<UserEntity> {
     if (payload.type !== "refresh") {
       throw new UnauthorizedException("Invalid token type");
     }
 
-    const refreshToken: string = req.body?.refreshToken;
+    const refreshToken: string | undefined = req.body?.refreshToken;
     if (!refreshToken) {
       throw new UnauthorizedException("Refresh token is required");
     }

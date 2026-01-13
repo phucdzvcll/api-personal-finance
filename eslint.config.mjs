@@ -1,49 +1,54 @@
-// @ts-check
-import eslint from '@eslint/js';
-import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended';
-import globals from 'globals';
-import tseslint from 'typescript-eslint';
+import js from "@eslint/js";
+import tseslint from "typescript-eslint";
 
-export default tseslint.config(
-  {
-    ignores: ['eslint.config.mjs'],
-  },
-  eslint.configs.recommended,
+export default [
+  js.configs.recommended,
+
+  ...tseslint.configs.recommended,
   ...tseslint.configs.recommendedTypeChecked,
-  eslintPluginPrettierRecommended,
+
   {
     languageOptions: {
-      globals: {
-        ...globals.node,
-        ...globals.jest,
-      },
-      sourceType: 'commonjs',
       parserOptions: {
-        projectService: true,
+        project: "./tsconfig.json",
         tsconfigRootDir: import.meta.dirname,
+        sourceType: "module",
       },
     },
-  },
-  {
+
+    ignores: ["dist/", "node_modules/", "migration/", "documents/", ".cursor/**"],
+
     rules: {
-      '@typescript-eslint/no-explicit-any': 'off',
-      '@typescript-eslint/no-floating-promises': 'warn',
-      '@typescript-eslint/no-unsafe-argument': 'warn',
-      'prettier/prettier': [
-        'error',
+      /* =========================
+       * Type safety (RẤT QUAN TRỌNG)
+       * ========================= */
+      "@typescript-eslint/no-unsafe-assignment": "error",
+      "@typescript-eslint/no-unsafe-call": "error",
+      "@typescript-eslint/no-unsafe-member-access": "error",
+      "@typescript-eslint/no-unsafe-return": "error",
+
+      /* =========================
+       * Async safety
+       * ========================= */
+      "@typescript-eslint/no-floating-promises": "error",
+      "@typescript-eslint/await-thenable": "error",
+
+      /* =========================
+       * Clean code
+       * ========================= */
+      "@typescript-eslint/no-explicit-any": "error",
+      "@typescript-eslint/no-unused-vars": [
+        "warn",
         {
-          semi: true,
-          trailingComma: 'es5',
-          singleQuote: false,
-          printWidth: 120,
-          tabWidth: 2,
-          useTabs: false,
-          arrowParens: 'always',
-          endOfLine: 'lf',
-          bracketSpacing: true,
-          jsxSingleQuote: false,
+          argsIgnorePattern: "^_",
+          varsIgnorePattern: "^_",
         },
       ],
+
+      /* =========================
+       * Backend friendly
+       * ========================= */
+      "no-console": "off",
     },
   },
-);
+];

@@ -94,7 +94,7 @@ export class AuthController {
     status: 401,
     description: "Unauthorized",
   })
-  async getProfile(@GetUser() user: UserEntity): Promise<UserResponseDto> {
+  getProfile(@GetUser() user: UserEntity): UserResponseDto {
     return {
       id: user.id,
       username: user.username,
