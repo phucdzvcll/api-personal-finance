@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn } from "typeorm";
 
 @Entity("users")
 export class UserEntity {
@@ -14,6 +14,12 @@ export class UserEntity {
   @Column({ name: "password_hash" })
   passwordHash: string;
 
+  @Column({ name: "refresh_token", type: "varchar", nullable: true })
+  refreshToken: string | null;
+
   @CreateDateColumn({ name: "created_at" })
   createdAt: Date;
+
+  @UpdateDateColumn({ name: "updated_at" })
+  updatedAt: Date;
 }

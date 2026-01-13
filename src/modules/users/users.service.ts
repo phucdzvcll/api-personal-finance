@@ -1,4 +1,4 @@
-import { Injectable, ConflictException } from "@nestjs/common";
+import { ConflictException, Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import * as bcrypt from "bcrypt";
 import { UserRepository } from "./repositories/user.repository";
@@ -59,13 +59,16 @@ export class UsersService {
     return bcrypt.compare(password, passwordHash);
   }
 
+  async updateRefreshToken(userId: number, refreshToken: string | null): Promise<void> {
+    await this.userRepository.update(userId, { refreshToken });
+  }
+
   private toResponseDto(user: UserEntity): UserResponseDto {
-    const dto: UserResponseDto = {
+    return {
       id: user.id,
       username: user.username,
       email: user.email,
       createdAt: user.createdAt,
     };
-    return dto;
   }
 }

@@ -7,6 +7,7 @@ import { AuthService } from "./auth.service";
 import { AuthController } from "./auth.controller";
 import { UsersModule } from "../users/users.module";
 import { JwtStrategy } from "./strategies/jwt.strategy";
+import { JwtRefreshStrategy } from "./strategies/jwt-refresh.strategy";
 
 @Module({
   imports: [
@@ -16,18 +17,18 @@ import { JwtStrategy } from "./strategies/jwt.strategy";
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => {
         const secret: string = configService.get<string>("jwt.secret") || "";
-        const expiresInConfig: string = configService.get<string>("jwt.expiresIn") || "7d";
-        const expiresIn: StringValue | number = expiresInConfig as StringValue;
+        const accessTokenExpiresInConfig: string = configService.get<string>("jwt.accessTokenExpiresIn") || "15m";
+        const accessTokenExpiresIn: StringValue | number = accessTokenExpiresInConfig as StringValue;
         return {
           secret,
-          signOptions: { expiresIn },
+          signOptions: { expiresIn: accessTokenExpiresIn },
         };
       },
       inject: [ConfigService],
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthService, JwtStrategy],
+  providers: [AuthService, JwtStrategy, JwtRefreshStrategy],
   exports: [AuthService],
 })
 export class AuthModule {}
