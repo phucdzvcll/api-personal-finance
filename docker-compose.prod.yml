@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: personal_finance_db_prod
+    restart: always
+    environment:
+      POSTGRES_USER: ${DB_USER:-postgres}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
+      POSTGRES_DB: ${DB_NAME:-personal_finance_prod}
+      PGDATA: /var/lib/postgresql/data/pgdata
+    ports:
+      - "${DB_PORT:-5434}:5432"
+    volumes:
+      - postgres_data_prod:/var/lib/postgresql/data
+    networks:
+      - personal_finance_network_prod
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-postgres} -d ${DB_NAME:-personal_finance_prod}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    # Production-specific: no port exposure (use internal network only)
+    # Uncomment the line below and remove ports section for production
+    # expose:
+    #   - "5432"
+
+volumes:
+  postgres_data_prod:
+    driver: local
+
+networks:
+  personal_finance_network_prod:
+    driver: bridge
