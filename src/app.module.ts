@@ -6,6 +6,8 @@ import { AppService } from "./app.service";
 import { ConfigModule as AppConfigModule } from "./config/config.module";
 import { AuthModule } from "./modules/auth/auth.module";
 import { UsersModule } from "./modules/users/users.module";
+import { CategoriesModule } from "./modules/categories/categories.module";
+import { TransactionsModule } from "./modules/transactions/transactions.module";
 
 @Module({
   imports: [
@@ -30,6 +32,8 @@ import { UsersModule } from "./modules/users/users.module";
     }),
     UsersModule,
     AuthModule,
+    CategoriesModule,
+    TransactionsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

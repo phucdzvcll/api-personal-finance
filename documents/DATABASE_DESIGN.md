@@ -74,13 +74,14 @@ Represents an authenticated system user.
 Represents a user-defined classification for transactions.
 
 #### Fields
-| Field | Type | Description |
-|------|------|-------------|
-| id | Integer (PK) | Unique identifier |
+| Field   | Type | Description |
+|---------|------|-------------|
+| id      | Integer (PK) | Unique identifier |
 | user_id | Integer (FK) | Owner of the category |
-| name | String | Category name |
-| type | Enum | INCOME or EXPENSE |
-| icon | String (optional) | UI icon reference |
+| name    | String | Category name |
+| type    | Enum | INCOME or EXPENSE |
+| icon    | String (optional) | UI icon reference |
+| color   | String (optional) | |
 
 #### Notes
 - Categories are user-specific

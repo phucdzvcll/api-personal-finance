@@ -3,6 +3,7 @@ import { JwtService } from "@nestjs/jwt";
 import { ConfigService } from "@nestjs/config";
 import type { StringValue } from "ms";
 import { UsersService } from "../users/users.service";
+import { CategoriesService } from "../categories/categories.service";
 import { CreateUserDto } from "../users/dto/create-user.dto";
 import { LoginDto } from "./dto/login.dto";
 import { RefreshTokenDto } from "./dto/refresh-token.dto";
@@ -16,6 +17,7 @@ import { JwtRefreshPayload } from "./strategies/jwt-refresh.strategy";
 export class AuthService {
   constructor(
     private readonly usersService: UsersService,
+    private readonly categoriesService: CategoriesService,
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService
   ) {}
@@ -23,6 +25,9 @@ export class AuthService {
   async register(createUserDto: CreateUserDto): Promise<AuthResponseDto> {
     try {
       const user: UserResponseDto = await this.usersService.create(createUserDto);
+
+      // Create default categories for the new user
+      await this.categoriesService.createDefaultCategories(user.id);
 
       const accessToken: string = await this.generateAccessToken({
         sub: user.id,
