@@ -95,4 +95,4 @@ npm run start:prod
 4. Start database: `npm run docker:dev:up`
 5. Start application: `npm run start:dev`
 
-For detailed information, see [ENVIRONMENT_SETUP.md](documents/ENVIRONMENT_SETUP.md)
+For detailed information, see [ENVIRONMENT_SETUP.md](ENVIRONMENT_SETUP.md)
