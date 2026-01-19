@@ -51,6 +51,8 @@ async function bootstrap() {
       .addTag("categories", "Category management endpoints")
       .addTag("debts", "Debt management endpoints")
       .addTag("credit-cards", "Credit card management endpoints")
+      .addTag("summary", "Financial summary endpoints")
+      .addTag("audit-logs", "Audit log endpoints")
       .build();
 
     const document = SwaggerModule.createDocument(app, config);
