@@ -50,11 +50,15 @@ export class SummaryService {
       categoryId: number;
       categoryName: string;
       totalAmount: string;
+      icon: string | null;
+      color: string | null;
     }> = await this.transactionRepository
       .createQueryBuilder("transaction")
       .leftJoin("transaction.category", "category")
       .select("category.id", "categoryId")
       .addSelect("category.name", "categoryName")
+      .addSelect("category.icon", "icon")
+      .addSelect("category.color", "color")
       .addSelect("COALESCE(SUM(transaction.amount), 0)", "totalAmount")
       .where("transaction.userId = :userId", { userId })
       .andWhere("transaction.type = :type", { type: TransactionType.EXPENSE })
@@ -62,16 +66,26 @@ export class SummaryService {
       .andWhere("EXTRACT(MONTH FROM transaction.transactionDate) = :month", { month })
       .groupBy("category.id")
       .addGroupBy("category.name")
-      .orderBy("totalAmount", "DESC")
+      .addGroupBy("category.icon")
+      .addGroupBy("category.color")
+      .orderBy("SUM(transaction.amount)", "DESC")
       .getRawMany<{
         categoryId: number;
         categoryName: string;
         totalAmount: string;
+        icon: string | null;
+        color: string | null;
       }>();
 
     // Calculate percentages and format response
     const expenseByCategory: ExpenseByCategoryDto[] = expenseByCategoryRaw.map(
-      (item: { categoryId: number; categoryName: string; totalAmount: string }): ExpenseByCategoryDto => {
+      (item: {
+        categoryId: number;
+        categoryName: string;
+        totalAmount: string;
+        icon: string | null;
+        color: string | null;
+      }): ExpenseByCategoryDto => {
         const totalAmount: number = parseFloat(item.totalAmount);
         const percentage: number = totalExpense > 0 ? Math.round((totalAmount / totalExpense) * 100) : 0;
 
@@ -80,6 +94,8 @@ export class SummaryService {
           categoryName: item.categoryName,
           totalAmount,
           percentage,
+          icon: item.icon,
+          color: item.color,
         };
       }
     );

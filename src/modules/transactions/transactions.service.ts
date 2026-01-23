@@ -61,6 +61,7 @@ export class TransactionsService {
         categoryId: createTransactionDto.categoryId,
         transactionDate,
         note: createTransactionDto.note ?? null,
+        attachmentUrl: createTransactionDto.attachmentUrl ?? null,
       });
 
       const savedTransaction: TransactionEntity = await queryRunner.manager.save(TransactionEntity, transaction);
@@ -99,13 +100,20 @@ export class TransactionsService {
     }
   }
 
-  async findAll(userId: number, type?: TransactionType, startDate?: string, endDate?: string): Promise<TransactionResponseDto[]> {
+  async findAll(
+    userId: number,
+    type?: TransactionType,
+    categoryId?: number,
+    startDate?: string,
+    endDate?: string
+  ): Promise<TransactionResponseDto[]> {
     const startDateObj: Date | undefined = startDate ? new Date(startDate) : undefined;
     const endDateObj: Date | undefined = endDate ? new Date(endDate) : undefined;
 
     const transactions: TransactionEntity[] = await this.transactionRepository.findByUserIdAndFilters(
       userId,
       type,
+      categoryId,
       startDateObj,
       endDateObj
     );
@@ -187,6 +195,9 @@ export class TransactionsService {
     }
     if (updateTransactionDto.note !== undefined) {
       updateData.note = updateTransactionDto.note;
+    }
+    if (updateTransactionDto.attachmentUrl !== undefined) {
+      updateData.attachmentUrl = updateTransactionDto.attachmentUrl;
     }
 
     // Update transaction with atomic audit log
@@ -289,6 +300,7 @@ export class TransactionsService {
       },
       transactionDate: transaction.transactionDate,
       note: transaction.note,
+      attachmentUrl: transaction.attachmentUrl,
       createdAt: transaction.createdAt,
       updatedAt: transaction.updatedAt,
     };
@@ -303,6 +315,7 @@ export class TransactionsService {
       categoryId: transaction.categoryId,
       transactionDate: transaction.transactionDate instanceof Date ? transaction.transactionDate.toISOString() : transaction.transactionDate,
       note: transaction.note,
+      attachmentUrl: transaction.attachmentUrl,
       createdAt: transaction.createdAt instanceof Date ? transaction.createdAt.toISOString() : transaction.createdAt,
       updatedAt: transaction.updatedAt instanceof Date ? transaction.updatedAt.toISOString() : transaction.updatedAt,
     };

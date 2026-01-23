@@ -28,6 +28,7 @@ export class TransactionRepository extends Repository<TransactionEntity> {
   async findByUserIdAndFilters(
     userId: number,
     type?: TransactionType,
+    categoryId?: number,
     startDate?: Date,
     endDate?: Date
   ): Promise<TransactionEntity[]> {
@@ -39,6 +40,10 @@ export class TransactionRepository extends Repository<TransactionEntity> {
 
     if (type) {
       queryBuilder.andWhere("transaction.type = :type", { type });
+    }
+
+    if (categoryId) {
+      queryBuilder.andWhere("transaction.categoryId = :categoryId", { categoryId });
     }
 
     if (startDate) {

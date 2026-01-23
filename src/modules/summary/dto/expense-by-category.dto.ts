@@ -26,4 +26,18 @@ export class ExpenseByCategoryDto {
     maximum: 100,
   })
   percentage: number;
+
+  @ApiProperty({
+    description: "Category icon identifier",
+    example: "food",
+    nullable: true,
+  })
+  icon: string | null;
+
+  @ApiProperty({
+    description: "Category display color",
+    example: "#FF5733",
+    nullable: true,
+  })
+  color: string | null;
 }

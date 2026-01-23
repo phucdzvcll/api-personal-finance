@@ -1,5 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsEnum, IsOptional, IsDateString } from "class-validator";
+import { IsEnum, IsOptional, IsDateString, IsInt, Min } from "class-validator";
+import { Type } from "class-transformer";
 import { TransactionType } from "../entities/transaction.entity";
 
 export class ListTransactionsQueryDto {
@@ -11,6 +12,17 @@ export class ListTransactionsQueryDto {
   @IsOptional()
   @IsEnum(TransactionType)
   type?: TransactionType;
+
+  @ApiProperty({
+    description: "Filter by category ID",
+    example: 1,
+    required: false,
+  })
+  @IsOptional()
+  @Type(() => Number)
+  @IsInt()
+  @Min(1)
+  categoryId?: number;
 
   @ApiProperty({
     description: "Start date for filtering (YYYY-MM-DD format)",

@@ -1,0 +1,3426 @@
+{
+  "info": {
+    "_postman_id": "e3684159-0485-46c3-bfcb-aa976f438016",
+    "name": "Personal Finance Management API",
+    "description": "API documentation for Personal Finance Management System",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "api",
+      "item": [
+        {
+          "name": "v1",
+          "item": [
+            {
+              "name": "auth",
+              "item": [
+                {
+                  "name": "register",
+                  "item": [
+                    {
+                      "name": "Register a new user",
+                      "event": [
+                        {
+                          "listen": "test",
+                          "script": {
+                            "type": "text/javascript",
+                            "exec": [
+                              "pm.test('Status code is 201', function () {",
+                              "    pm.response.to.have.status(201);",
+                              "})",
+                              "",
+                              "pm.test('Response has required user data fields', function () {",
+                              "    const jsonData = pm.response.json();",
+                              "    pm.expect(jsonData).to.have.property('user');",
+                              "    pm.expect(jsonData.user).to.have.property('id');",
+                              "    pm.expect(jsonData.user).to.have.property('email');",
+                              "})",
+                              "",
+                              "pm.test('Response has tokens', function () {",
+                              "    const jsonData = pm.response.json();",
+                              "    pm.expect(jsonData).to.have.property('accessToken');",
+                              "    pm.expect(jsonData).to.have.property('refreshToken');",
+                              "})",
+                              "",
+                              "pm.test('Save tokens to collection variables', function () {",
+                              "    const jsonData = pm.response.json();",
+                              "    if (jsonData.accessToken) {",
+                              "        pm.collectionVariables.set('accessToken', jsonData.accessToken);",
+                              "    }",
+                              "    if (jsonData.refreshToken) {",
+                              "        pm.collectionVariables.set('refreshToken', jsonData.refreshToken);",
+                              "    }",
+                              "    pm.expect(true).to.be.true;",
+                              "})",
+                              "",
+                              "pm.test('Email format is valid', function () {",
+                              "    const jsonData = pm.response.json();",
+                              "    if (jsonData.user && jsonData.user.email) {",
+                              "        const emailRegex = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/;",
+                              "        pm.expect(jsonData.user.email).to.match(emailRegex);",
+                              "    }",
+                              "})"
+                            ]
+                          }
+                        }
+                      ],
+                      "id": "a05d133a-a34a-4829-b6b7-d727034e7d8a",
+                      "request": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"username\": \"<string>\",\n  \"email\": \"<string>\",\n  \"password\": \"<string>\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/v1/auth/register",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "v1",
+                            "auth",
+                            "register"
+                          ]
+                        }
+                      },
+                      "response": [
+                        {
+                          "id": "8802da2e-51dc-48a6-8d7a-a858d3bd168d",
+                          "name": "User successfully registered",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"username\": \"<string>\",\n  \"email\": \"<string>\",\n  \"password\": \"<string>\"\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "/api/v1/auth/register",
+                              "path": [
+                                "api",
+                                "v1",
+                                "auth",
+                                "register"
+                              ]
+                            }
+                          },
+                          "status": "Created",
+                          "code": 201,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "body": "{\n  \"accessToken\": \"<string>\",\n  \"refreshToken\": \"<string>\",\n  \"user\": {\n    \"id\": \"<number>\",\n    \"username\": \"<string>\",\n    \"email\": \"<string>\",\n    \"createdAt\": \"<dateTime>\"\n  }\n}"
+                        },
+                        {
+                          "id": "37cf5bc7-22a0-47fb-8d72-7d29fd4fdbe9",
+                          "name": "Username or email already exists",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"username\": \"<string>\",\n  \"email\": \"<string>\",\n  \"password\": \"<string>\"\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/api/v1/auth/register",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "v1",
+                                "auth",
+                                "register"
+                              ]
+                            }
+                          },
+                          "status": "Conflict",
+                          "code": 409,
+                          "_postman_previewlanguage": "text",
+                          "header": [],
+                          "cookie": [],
+                          "body": ""
+                        }
+                      ]
+                    }
+                  ],
+                  "id": "9820e32a-06c9-4d4b-b24b-ba75537cf693"
+                },
+                {
+                  "name": "login",
+                  "item": [
+                    {
+                      "name": "Login with username/email and password",
+                      "event": [
+                        {
+                          "listen": "test",
+                          "script": {
+                            "type": "text/javascript",
+                            "exec": [
+                              "pm.test('Status code is 200', function () {",
+                              "    pm.response.to.have.status(200);",
+                              "})",
+                              "",
+                              "pm.test('Response contains accessToken and refreshToken', function () {",
+                              "    const jsonData = pm.response.json();",
+                              "    pm.expect(jsonData).to.have.property('accessToken');",
+                              "    pm.expect(jsonData).to.have.property('refreshToken');",
+                              "})",
+                              "",
+                              "pm.test('Save tokens to collection variables', function () {",
+                              "    const jsonData = pm.response.json();",
+                              "    if (jsonData.accessToken) {",
+                              "        pm.collectionVariables.set('accessToken', jsonData.accessToken);",
+                              "    }",
+                              "    if (jsonData.refreshToken) {",
+                              "        pm.collectionVariables.set('refreshToken', jsonData.refreshToken);",
+                              "    }",
+                              "    pm.expect(true).to.be.true;",
+                              "})",
+                              "",
+                              "pm.test('Token format is valid JWT', function () {",
+                              "    const jsonData = pm.response.json();",
+                              "    const jwtRegex = /^[A-Za-z0-9-_]+\\.[A-Za-z0-9-_]+\\.[A-Za-z0-9-_]+$/;",
+                              "    if (jsonData.accessToken) {",
+                              "        pm.expect(jsonData.accessToken).to.match(jwtRegex);",
+                              "    }",
+                              "    if (jsonData.refreshToken) {",
+                              "        pm.expect(jsonData.refreshToken).to.match(jwtRegex);",
+                              "    }",
+                              "})"
+                            ]
+                          }
+                        }
+                      ],
+                      "id": "89954f55-1ade-4a9c-ae5f-8e901b6971b8",
+                      "request": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"usernameOrEmail\": \"Rhymastic\",\n  \"password\": \"P@ssw0rd\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/v1/auth/login",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "v1",
+                            "auth",
+                            "login"
+                          ]
+                        }
+                      },
+                      "response": [
+                        {
+                          "id": "85ffa515-8027-4f78-ae57-789ad7e49b2b",
+                          "name": "Successfully authenticated",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"usernameOrEmail\": \"Rhymastic\",\n  \"password\": \"P@ssw0rd\"\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "/api/v1/auth/login",
+                              "path": [
+                                "api",
+                                "v1",
+                                "auth",
+                                "login"
+                              ]
+                            }
+                          },
+                          "status": "OK",
+                          "code": 200,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "body": "{\n  \"accessToken\": \"<string>\",\n  \"refreshToken\": \"<string>\",\n  \"user\": {\n    \"id\": \"<number>\",\n    \"username\": \"<string>\",\n    \"email\": \"<string>\",\n    \"createdAt\": \"<dateTime>\"\n  }\n}"
+                        },
+                        {
+                          "id": "0bc856db-624c-42aa-b59c-57836fb89881",
+                          "name": "Invalid credentials",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"usernameOrEmail\": \"Rhymastic\",\n  \"password\": \"P@ssw0rd\"\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/api/v1/auth/login",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "v1",
+                                "auth",
+                                "login"
+                              ]
+                            }
+                          },
+                          "status": "Unauthorized",
+                          "code": 401,
+                          "_postman_previewlanguage": "text",
+                          "header": [],
+                          "cookie": [],
+                          "body": ""
+                        }
+                      ]
+                    }
+                  ],
+                  "id": "015537b3-041d-44ed-a2de-2cf34efbd729"
+                },
+                {
+                  "name": "refresh",
+                  "item": [
+                    {
+                      "name": "Refresh access token using refresh token",
+                      "event": [
+                        {
+                          "listen": "test",
+                          "script": {
+                            "type": "text/javascript",
+                            "exec": [
+                              "pm.test('Status code is 200', function () {",
+                              "    pm.response.to.have.status(200);",
+                              "})",
+                              "",
+                              "pm.test('Response contains new accessToken', function () {",
+                              "    const jsonData = pm.response.json();",
+                              "    pm.expect(jsonData).to.have.property('accessToken');",
+                              "})",
+                              "",
+                              "pm.test('Update stored accessToken', function () {",
+                              "    const jsonData = pm.response.json();",
+                              "    if (jsonData.accessToken) {",
+                              "        pm.collectionVariables.set('accessToken', jsonData.accessToken);",
+                              "    }",
+                              "    if (jsonData.refreshToken) {",
+                              "        pm.collectionVariables.set('refreshToken', jsonData.refreshToken);",
+                              "    }",
+                              "    pm.expect(true).to.be.true;",
+                              "})"
+                            ]
+                          }
+                        }
+                      ],
+                      "id": "84a99ad1-40b8-4b88-b929-825b57b317f7",
+                      "request": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"refreshToken\": \"<string>\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/v1/auth/refresh",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "v1",
+                            "auth",
+                            "refresh"
+                          ]
+                        }
+                      },
+                      "response": [
+                        {
+                          "id": "11cce773-ca15-43f2-9dba-fa53f5444e09",
+                          "name": "Tokens refreshed successfully",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"refreshToken\": \"<string>\"\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "/api/v1/auth/refresh",
+                              "path": [
+                                "api",
+                                "v1",
+                                "auth",
+                                "refresh"
+                              ]
+                            }
+                          },
+                          "status": "OK",
+                          "code": 200,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "body": "{\n  \"accessToken\": \"<string>\",\n  \"refreshToken\": \"<string>\",\n  \"user\": {\n    \"id\": \"<number>\",\n    \"username\": \"<string>\",\n    \"email\": \"<string>\",\n    \"createdAt\": \"<dateTime>\"\n  }\n}"
+                        },
+                        {
+                          "id": "dd98d07e-7a4e-4bc7-a4db-4a792234e4f9",
+                          "name": "Invalid refresh token",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"refreshToken\": \"<string>\"\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/api/v1/auth/refresh",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "v1",
+                                "auth",
+                                "refresh"
+                              ]
+                            }
+                          },
+                          "status": "Unauthorized",
+                          "code": 401,
+                          "_postman_previewlanguage": "text",
+                          "header": [],
+                          "cookie": [],
+                          "body": ""
+                        }
+                      ]
+                    }
+                  ],
+                  "id": "1761bdde-0988-4243-9708-b8ec13659e35"
+                },
+                {
+                  "name": "logout",
+                  "item": [
+                    {
+                      "name": "Logout and invalidate refresh token",
+                      "id": "5903e86e-073c-473c-9f17-f64d3f314697",
+                      "request": {
+                        "auth": {
+                          "type": "bearer",
+                          "bearer": [
+                            {
+                              "key": "token",
+                              "value": "{{bearerToken}}",
+                              "type": "string"
+                            }
+                          ]
+                        },
+                        "method": "POST",
+                        "header": [],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/v1/auth/logout",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "v1",
+                            "auth",
+                            "logout"
+                          ]
+                        }
+                      },
+                      "response": [
+                        {
+                          "id": "9edd0b27-0c93-43fe-b2de-54ffd0d45636",
+                          "name": "Successfully logged out",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Authorization",
+                                "value": "Bearer <token>",
+                                "description": "Added as a part of security scheme: bearer"
+                              }
+                            ],
+                            "url": {
+                              "raw": "/api/v1/auth/logout",
+                              "path": [
+                                "api",
+                                "v1",
+                                "auth",
+                                "logout"
+                              ]
+                            }
+                          },
+                          "status": "OK",
+                          "code": 200,
+                          "_postman_previewlanguage": "text",
+                          "header": [],
+                          "cookie": [],
+                          "body": ""
+                        },
+                        {
+                          "id": "d4ee9316-faea-46f5-8350-3924ecaf2107",
+                          "name": "Unauthorized",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Authorization",
+                                "value": "Bearer <token>",
+                                "description": "Added as a part of security scheme: bearer"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/api/v1/auth/logout",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "v1",
+                                "auth",
+                                "logout"
+                              ]
+                            }
+                          },
+                          "status": "Unauthorized",
+                          "code": 401,
+                          "_postman_previewlanguage": "text",
+                          "header": [],
+                          "cookie": [],
+                          "body": ""
+                        }
+                      ]
+                    }
+                  ],
+                  "id": "af698a54-f2a7-4c04-9dda-64c550cabf16"
+                },
+                {
+                  "name": "profile",
+                  "item": [
+                    {
+                      "name": "Get current user profile",
+                      "event": [
+                        {
+                          "listen": "test",
+                          "script": {
+                            "id": "d06545ed-e164-4371-b677-078c9646cb59",
+                            "exec": [
+                              "pm.test('Status code is 200', function () {",
+                              "    pm.response.to.have.status(200);",
+                              "})",
+                              "",
+                              "pm.test('User profile structure is valid', function () {",
+                              "    const jsonData = pm.response.json();",
+                              "    pm.expect(jsonData).to.have.property('id');",
+                              "    pm.expect(jsonData).to.have.property('email');",
+                              "})",
+                              "",
+                              "pm.test('Authentication is working', function () {",
+                              "    pm.expect(pm.response.code).to.equal(200);",
+                              "    pm.expect(pm.response.code).to.not.equal(401);",
+                              "    pm.expect(pm.response.code).to.not.equal(403);",
+                              "})"
+                            ],
+                            "type": "text/javascript",
+                            "packages": {},
+                            "requests": {}
+                          }
+                        },
+                        {
+                          "listen": "prerequest",
+                          "script": {
+                            "id": "20dc65c9-13e8-4fba-8eee-7d72e03a08cb",
+                            "exec": [
+                              ""
+                            ],
+                            "type": "text/javascript",
+                            "packages": {},
+                            "requests": {}
+                          }
+                        }
+                      ],
+                      "id": "3132cdf8-d3ee-4682-ab55-971edb71d6f3",
+                      "request": {
+                        "auth": {
+                          "type": "bearer",
+                          "bearer": [
+                            {
+                              "key": "token",
+                              "value": "{{bearerToken}}",
+                              "type": "string"
+                            }
+                          ]
+                        },
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/v1/auth/profile",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "v1",
+                            "auth",
+                            "profile"
+                          ]
+                        }
+                      },
+                      "response": [
+                        {
+                          "id": "e2a2eead-45f5-4d35-aded-7042cc744016",
+                          "name": "User profile retrieved successfully",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Authorization",
+                                "value": "Bearer <token>",
+                                "description": "Added as a part of security scheme: bearer"
+                              }
+                            ],
+                            "url": {
+                              "raw": "/api/v1/auth/profile",
+                              "path": [
+                                "api",
+                                "v1",
+                                "auth",
+                                "profile"
+                              ]
+                            }
+                          },
+                          "status": "OK",
+                          "code": 200,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "body": "{\n  \"id\": \"<number>\",\n  \"username\": \"<string>\",\n  \"email\": \"<string>\",\n  \"createdAt\": \"<dateTime>\"\n}"
+                        },
+                        {
+                          "id": "3d7ddafe-aa9e-4c88-92ac-0f7fee56b763",
+                          "name": "Unauthorized",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Authorization",
+                                "value": "Bearer <token>",
+                                "description": "Added as a part of security scheme: bearer"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/api/v1/auth/profile",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "v1",
+                                "auth",
+                                "profile"
+                              ]
+                            }
+                          },
+                          "status": "Unauthorized",
+                          "code": 401,
+                          "_postman_previewlanguage": "text",
+                          "header": [],
+                          "cookie": [],
+                          "body": ""
+                        }
+                      ]
+                    }
+                  ],
+                  "id": "f7207749-bbf2-4a55-b9ea-2a2b6b6f8e75"
+                }
+              ],
+              "id": "35c5d9c5-783f-4055-906b-7630264a553b",
+              "event": [
+                {
+                  "id": "19952da0-21f9-47b4-ab5d-7e0e13f0f55b",
+                  "listen": "prerequest",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "// Auth folder pre-request script",
+                      "// Handle token refresh if needed",
+                      "",
+                      "const accessToken = pm.collectionVariables.get(\"accessToken\");",
+                      "const refreshToken = pm.collectionVariables.get(\"refreshToken\");",
+                      "const tokenExpiry = pm.collectionVariables.get(\"tokenExpiry\");",
+                      "const requestUrl = pm.request.url.toString();",
+                      "",
+                      "// Skip token refresh for login, register, and refresh endpoints",
+                      "if (requestUrl.includes(\"/auth/login\") || requestUrl.includes(\"/auth/register\") || requestUrl.includes(\"/auth/refresh\")) {",
+                      "    return;",
+                      "}",
+                      "",
+                      "// Check if token needs refresh (if expiry is set and token is about to expire)",
+                      "if (tokenExpiry && refreshToken) {",
+                      "    const currentTime = Date.now();",
+                      "    const expiryTime = parseInt(tokenExpiry);",
+                      "    ",
+                      "    // Refresh if token expires in less than 5 minutes",
+                      "    if (currentTime > expiryTime - 300000) {",
+                      "        console.log(\"Token is about to expire, consider refreshing...\");",
+                      "    }",
+                      "}"
+                    ]
+                  }
+                },
+                {
+                  "id": "ad0a5ff5-769e-4a0e-9467-bc78bef5f89d",
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "// Auth folder test script",
+                      "// Verify authentication headers are properly set",
+                      "",
+                      "pm.test(\"Request has proper authentication setup\", function () {",
+                      "    const requestUrl = pm.request.url.toString();",
+                      "    ",
+                      "    // Skip auth header check for login and register endpoints",
+                      "    if (requestUrl.includes(\"/auth/login\") || requestUrl.includes(\"/auth/register\")) {",
+                      "        pm.expect(true).to.be.true; // Pass for auth endpoints",
+                      "        return;",
+                      "    }",
+                      "    ",
+                      "    // For other auth endpoints, verify Authorization header if token exists",
+                      "    const accessToken = pm.collectionVariables.get(\"accessToken\");",
+                      "    if (accessToken) {",
+                      "        const authHeader = pm.request.headers.get(\"Authorization\");",
+                      "        pm.expect(authHeader).to.exist;",
+                      "        pm.expect(authHeader).to.include(\"Bearer\");",
+                      "    }",
+                      "});"
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "name": "categories",
+              "item": [
+                {
+                  "name": "{id}",
+                  "item": [
+                    {
+                      "name": "Get a category by ID",
+                      "event": [
+                        {
+                          "listen": "test",
+                          "script": {
+                            "id": "f7d7be98-d8b9-40f9-975a-aa3b6c8e4cb6",
+                            "exec": [
+                              "pm.test('Status code is 200', function () {",
+                              "    pm.response.to.have.status(200);",
+                              "})",
+                              "",
+                              "pm.test('Category data structure is valid', function () {",
+                              "    const jsonData = pm.response.json();",
+                              "    pm.expect(jsonData).to.have.property('id');",
+                              "    pm.expect(jsonData).to.have.property('name');",
+                              "    pm.expect(jsonData).to.have.property('type');",
+                              "})",
+                              "",
+                              "pm.test('Category ID matches saved ID', function () {",
+                              "    const jsonData = pm.response.json();",
+                              "    const savedCategoryId = pm.collectionVariables.get('categoryId');",
+                              "    if (savedCategoryId) {",
+                              "        pm.expect(jsonData.id.toString()).to.equal(savedCategoryId.toString());",
+                              "    }",
+                              "})"
+                            ],
+                            "type": "text/javascript",
+                            "packages": {},
+                            "requests": {}
+                          }
+                        },
+                        {
+                          "listen": "prerequest",
+                          "script": {
+                            "id": "4d2b4a82-0000-4d9d-b863-d8340a370ccd",
+                            "exec": [
+                              ""
+                            ],
+                            "type": "text/javascript",
+                            "packages": {},
+                            "requests": {}
+                          }
+                        }
+                      ],
+                      "id": "5ed7fa05-dc6d-41bb-95dc-9db1b1c62b88",
+                      "request": {
+                        "auth": {
+                          "type": "bearer",
+                          "bearer": [
+                            {
+                              "key": "token",
+                              "value": "{{bearerToken}}",
+                              "type": "string"
+                            }
+                          ]
+                        },
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}api/v1/categories/:id",
+                          "host": [
+                            "{{baseUrl}}api"
+                          ],
+                          "path": [
+                            "v1",
+                            "categories",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id",
+                              "value": "1",
+                              "description": "(Required) Category ID"
+                            }
+                          ]
+                        }
+                      },
+                      "response": [
+                        {
+                          "id": "15036de6-7692-46b0-b588-1efb9f93a5e2",
+                          "name": "Category retrieved successfully",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Authorization",
+                                "value": "Bearer <token>",
+                                "description": "Added as a part of security scheme: bearer"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/api/v1/categories/:id",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "v1",
+                                "categories",
+                                ":id"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "id",
+                                  "value": "<number>",
+                                  "description": "(Required) Category ID"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "OK",
+                          "code": 200,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "body": "{\n  \"id\": \"<number>\",\n  \"name\": \"<string>\",\n  \"type\": \"expense\",\n  \"icon\": {},\n  \"color\": {},\n  \"createdAt\": \"<dateTime>\",\n  \"updatedAt\": \"<dateTime>\"\n}"
+                        },
+                        {
+                          "id": "06d72efa-f270-4999-8940-7c30ac8df4ac",
+                          "name": "Category not found",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Authorization",
+                                "value": "Bearer <token>",
+                                "description": "Added as a part of security scheme: bearer"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/api/v1/categories/:id",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "v1",
+                                "categories",
+                                ":id"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "id",
+                                  "value": "<number>",
+                                  "description": "(Required) Category ID"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Not Found",
+                          "code": 404,
+                          "_postman_previewlanguage": "text",
+                          "header": [],
+                          "cookie": [],
+                          "body": ""
+                        }
+                      ]
+                    },
+                    {
+                      "name": "Update a category",
+                      "event": [
+                        {
+                          "listen": "test",
+                          "script": {
+                            "type": "text/javascript",
+                            "exec": [
+                              "pm.test('Status code is 200', function () {",
+                              "    pm.response.to.have.status(200);",
+                              "})",
+                              "",
+                              "pm.test('Updated fields are reflected in response', function () {",
+                              "    const jsonData = pm.response.json();",
+                              "    pm.expect(jsonData).to.have.property('id');",
+                              "    pm.expect(jsonData).to.have.property('name');",
+                              "    pm.expect(jsonData).to.have.property('type');",
+                              "    pm.expect(jsonData.name).to.be.a('string');",
+                              "})"
+                            ]
+                          }
+                        }
+                      ],
+                      "id": "5d2a9377-c64e-4083-8a37-7698c7ef93dd",
+                      "request": {
+                        "auth": {
+                          "type": "bearer",
+                          "bearer": [
+                            {
+                              "key": "token",
+                              "value": "{{bearerToken}}",
+                              "type": "string"
+                            }
+                          ]
+                        },
+                        "method": "PATCH",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"name\": \"<string>\",\n  \"icon\": \"<string>\",\n  \"color\": \"<string>\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/v1/categories/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "v1",
+                            "categories",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id",
+                              "value": "<number>",
+                              "description": "(Required) Category ID"
+                            }
+                          ]
+                        }
+                      },
+                      "response": [
+                        {
+                          "id": "43fb02e1-65df-4d0a-9260-f18d02635a05",
+                          "name": "Category successfully updated",
+                          "originalRequest": {
+                            "method": "PATCH",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Authorization",
+                                "value": "Bearer <token>",
+                                "description": "Added as a part of security scheme: bearer"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"name\": \"<string>\",\n  \"icon\": \"<string>\",\n  \"color\": \"<string>\"\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/api/v1/categories/:id",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "v1",
+                                "categories",
+                                ":id"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "id",
+                                  "value": "<number>",
+                                  "description": "(Required) Category ID"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "OK",
+                          "code": 200,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "body": "{\n  \"id\": \"<number>\",\n  \"name\": \"<string>\",\n  \"type\": \"expense\",\n  \"icon\": {},\n  \"color\": {},\n  \"createdAt\": \"<dateTime>\",\n  \"updatedAt\": \"<dateTime>\"\n}"
+                        },
+                        {
+                          "id": "155a8ce0-f2ab-40ff-9e8e-4661e9e28033",
+                          "name": "Category not found",
+                          "originalRequest": {
+                            "method": "PATCH",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Authorization",
+                                "value": "Bearer <token>",
+                                "description": "Added as a part of security scheme: bearer"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"name\": \"<string>\",\n  \"icon\": \"<string>\",\n  \"color\": \"<string>\"\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/api/v1/categories/:id",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "v1",
+                                "categories",
+                                ":id"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "id",
+                                  "value": "<number>",
+                                  "description": "(Required) Category ID"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Not Found",
+                          "code": 404,
+                          "_postman_previewlanguage": "text",
+                          "header": [],
+                          "cookie": [],
+                          "body": ""
+                        },
+                        {
+                          "id": "b7cf9e87-cfda-47e1-a82c-5c4bc8873c4c",
+                          "name": "Category name already exists for this user and type",
+                          "originalRequest": {
+                            "method": "PATCH",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Authorization",
+                                "value": "Bearer <token>",
+                                "description": "Added as a part of security scheme: bearer"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"name\": \"<string>\",\n  \"icon\": \"<string>\",\n  \"color\": \"<string>\"\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/api/v1/categories/:id",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "v1",
+                                "categories",
+                                ":id"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "id",
+                                  "value": "<number>",
+                                  "description": "(Required) Category ID"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Conflict",
+                          "code": 409,
+                          "_postman_previewlanguage": "text",
+                          "header": [],
+                          "cookie": [],
+                          "body": ""
+                        }
+                      ]
+                    },
+                    {
+                      "name": "Delete a category",
+                      "event": [
+                        {
+                          "listen": "test",
+                          "script": {
+                            "type": "text/javascript",
+                            "exec": [
+                              "pm.test('Status code is 200 or 204', function () {",
+                              "    pm.expect(pm.response.code).to.be.oneOf([",
+                              "        200,",
+                              "        204",
+                              "    ]);",
+                              "})",
+                              "",
+                              "pm.test('Verify successful deletion', function () {",
+                              "    if (pm.response.code === 200) {",
+                              "        const jsonData = pm.response.json();",
+                              "        const hasSuccessIndicator = jsonData.message || jsonData.success || jsonData.deleted;",
+                              "        pm.expect(hasSuccessIndicator).to.exist;",
+                              "    } else {",
+                              "        pm.expect(pm.response.code).to.equal(204);",
+                              "    }",
+                              "})"
+                            ]
+                          }
+                        }
+                      ],
+                      "id": "31a6194b-d45d-4b75-b7dc-69ee1327192e",
+                      "request": {
+                        "auth": {
+                          "type": "bearer",
+                          "bearer": [
+                            {
+                              "key": "token",
+                              "value": "{{bearerToken}}",
+                              "type": "string"
+                            }
+                          ]
+                        },
+                        "method": "DELETE",
+                        "header": [],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/v1/categories/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "v1",
+                            "categories",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id",
+                              "value": "<number>",
+                              "description": "(Required) Category ID"
+                            }
+                          ]
+                        }
+                      },
+                      "response": [
+                        {
+                          "id": "ec4ef382-a2f4-49af-ba62-48a6939547af",
+                          "name": "Category successfully deleted",
+                          "originalRequest": {
+                            "method": "DELETE",
+                            "header": [
+                              {
+                                "key": "Authorization",
+                                "value": "Bearer <token>",
+                                "description": "Added as a part of security scheme: bearer"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/api/v1/categories/:id",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "v1",
+                                "categories",
+                                ":id"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "id",
+                                  "value": "<number>",
+                                  "description": "(Required) Category ID"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "No Content",
+                          "code": 204,
+                          "_postman_previewlanguage": "text",
+                          "header": [],
+                          "cookie": [],
+                          "body": ""
+                        },
+                        {
+                          "id": "537af849-33f7-4fb7-ba79-3fe8fcf8f4cc",
+                          "name": "Cannot delete category because it is used by transactions",
+                          "originalRequest": {
+                            "method": "DELETE",
+                            "header": [
+                              {
+                                "key": "Authorization",
+                                "value": "Bearer <token>",
+                                "description": "Added as a part of security scheme: bearer"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/api/v1/categories/:id",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "v1",
+                                "categories",
+                                ":id"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "id",
+                                  "value": "<number>",
+                                  "description": "(Required) Category ID"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Bad Request",
+                          "code": 400,
+                          "_postman_previewlanguage": "text",
+                          "header": [],
+                          "cookie": [],
+                          "body": ""
+                        },
+                        {
+                          "id": "363c1da1-7934-40aa-8e58-847d6a5d4c80",
+                          "name": "Category not found",
+                          "originalRequest": {
+                            "method": "DELETE",
+                            "header": [
+                              {
+                                "key": "Authorization",
+                                "value": "Bearer <token>",
+                                "description": "Added as a part of security scheme: bearer"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/api/v1/categories/:id",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "v1",
+                                "categories",
+                                ":id"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "id",
+                                  "value": "<number>",
+                                  "description": "(Required) Category ID"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Not Found",
+                          "code": 404,
+                          "_postman_previewlanguage": "text",
+                          "header": [],
+                          "cookie": [],
+                          "body": ""
+                        }
+                      ]
+                    }
+                  ],
+                  "id": "3221929a-eb72-46e5-b3a1-923c0cf5fdb5"
+                },
+                {
+                  "name": "Create a new category",
+                  "event": [
+                    {
+                      "listen": "test",
+                      "script": {
+                        "type": "text/javascript",
+                        "exec": [
+                          "pm.test('Status code is 201', function () {",
+                          "    pm.response.to.have.status(201);",
+                          "})",
+                          "",
+                          "pm.test('Response contains category ID', function () {",
+                          "    const jsonData = pm.response.json();",
+                          "    pm.expect(jsonData).to.have.property('id');",
+                          "})",
+                          "",
+                          "pm.test('Save category ID to collection variable', function () {",
+                          "    const jsonData = pm.response.json();",
+                          "    if (jsonData.id) {",
+                          "        pm.collectionVariables.set('categoryId', jsonData.id);",
+                          "    }",
+                          "    pm.expect(true).to.be.true;",
+                          "})",
+                          "",
+                          "pm.test('Response has required fields (name, type)', function () {",
+                          "    const jsonData = pm.response.json();",
+                          "    pm.expect(jsonData).to.have.property('name');",
+                          "    pm.expect(jsonData).to.have.property('type');",
+                          "    pm.expect([",
+                          "        'income',",
+                          "        'expense'",
+                          "    ]).to.include(jsonData.type);",
+                          "})"
+                        ]
+                      }
+                    }
+                  ],
+                  "id": "b0f9ca48-ec24-4dd7-a018-81f004eee566",
+                  "request": {
+                    "auth": {
+                      "type": "bearer",
+                      "bearer": [
+                        {
+                          "key": "token",
+                          "value": "{{bearerToken}}",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"name\": \"<string>\",\n  \"type\": \"income\",\n  \"icon\": \"<string>\",\n  \"color\": \"<string>\"\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/api/v1/categories",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "v1",
+                        "categories"
+                      ]
+                    }
+                  },
+                  "response": [
+                    {
+                      "id": "fb36f40e-63d8-4534-a623-aae3f3ff083f",
+                      "name": "Category successfully created",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Authorization",
+                            "value": "Bearer <token>",
+                            "description": "Added as a part of security scheme: bearer"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"name\": \"<string>\",\n  \"type\": \"income\",\n  \"icon\": \"<string>\",\n  \"color\": \"<string>\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/v1/categories",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "v1",
+                            "categories"
+                          ]
+                        }
+                      },
+                      "status": "Created",
+                      "code": 201,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "body": "{\n  \"id\": \"<number>\",\n  \"name\": \"<string>\",\n  \"type\": \"expense\",\n  \"icon\": {},\n  \"color\": {},\n  \"createdAt\": \"<dateTime>\",\n  \"updatedAt\": \"<dateTime>\"\n}"
+                    },
+                    {
+                      "id": "7c0e601a-0bb8-41de-8a35-d130c88f1ca0",
+                      "name": "Category name already exists for this user and type",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Authorization",
+                            "value": "Bearer <token>",
+                            "description": "Added as a part of security scheme: bearer"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"name\": \"<string>\",\n  \"type\": \"income\",\n  \"icon\": \"<string>\",\n  \"color\": \"<string>\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/v1/categories",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "v1",
+                            "categories"
+                          ]
+                        }
+                      },
+                      "status": "Conflict",
+                      "code": 409,
+                      "_postman_previewlanguage": "text",
+                      "header": [],
+                      "cookie": [],
+                      "body": ""
+                    }
+                  ]
+                },
+                {
+                  "name": "List all categories for the authenticated user",
+                  "event": [
+                    {
+                      "listen": "test",
+                      "script": {
+                        "type": "text/javascript",
+                        "exec": [
+                          "pm.test('Status code is 200', function () {",
+                          "    pm.response.to.have.status(200);",
+                          "})",
+                          "",
+                          "pm.test('Response is an array', function () {",
+                          "    const jsonData = pm.response.json();",
+                          "    const categories = Array.isArray(jsonData) ? jsonData : jsonData.data || jsonData.categories;",
+                          "    pm.expect(categories).to.be.an('array');",
+                          "})",
+                          "",
+                          "pm.test('Verify pagination if present', function () {",
+                          "    const jsonData = pm.response.json();",
+                          "    if (jsonData.page !== undefined || jsonData.totalPages !== undefined || jsonData.meta !== undefined) {",
+                          "        if (jsonData.page !== undefined) {",
+                          "            pm.expect(jsonData.page).to.be.a('number');",
+                          "        }",
+                          "        if (jsonData.totalPages !== undefined) {",
+                          "            pm.expect(jsonData.totalPages).to.be.a('number');",
+                          "        }",
+                          "        if (jsonData.total !== undefined) {",
+                          "            pm.expect(jsonData.total).to.be.a('number');",
+                          "        }",
+                          "    }",
+                          "    pm.expect(true).to.be.true;",
+                          "})"
+                        ]
+                      }
+                    }
+                  ],
+                  "id": "287f683f-6fa3-4fda-8aa5-67090df4e603",
+                  "request": {
+                    "auth": {
+                      "type": "bearer",
+                      "bearer": [
+                        {
+                          "key": "token",
+                          "value": "{{bearerToken}}",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/v1/categories?type=expense",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "v1",
+                        "categories"
+                      ],
+                      "query": [
+                        {
+                          "key": "type",
+                          "value": "expense",
+                          "description": "Filter by category type (This can only be one of income,expense)"
+                        }
+                      ]
+                    }
+                  },
+                  "response": [
+                    {
+                      "id": "609f4980-486b-4d50-ad28-d33dac739899",
+                      "name": "Categories retrieved successfully",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Authorization",
+                            "value": "Bearer <token>",
+                            "description": "Added as a part of security scheme: bearer"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/v1/categories?type=expense",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "v1",
+                            "categories"
+                          ],
+                          "query": [
+                            {
+                              "key": "type",
+                              "value": "expense",
+                              "description": "Filter by category type (This can only be one of income,expense)"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "body": "[\n  {\n    \"id\": \"<number>\",\n    \"name\": \"<string>\",\n    \"type\": \"income\",\n    \"icon\": {},\n    \"color\": {},\n    \"createdAt\": \"<dateTime>\",\n    \"updatedAt\": \"<dateTime>\"\n  },\n  {\n    \"id\": \"<number>\",\n    \"name\": \"<string>\",\n    \"type\": \"expense\",\n    \"icon\": {},\n    \"color\": {},\n    \"createdAt\": \"<dateTime>\",\n    \"updatedAt\": \"<dateTime>\"\n  }\n]"
+                    }
+                  ]
+                }
+              ],
+              "id": "ff091529-01c3-4501-a2ad-38bb533b9992"
+            },
+            {
+              "name": "transactions",
+              "item": [
+                {
+                  "name": "{id}",
+                  "item": [
+                    {
+                      "name": "Get a transaction by ID",
+                      "event": [
+                        {
+                          "listen": "test",
+                          "script": {
+                            "type": "text/javascript",
+                            "exec": [
+                              "pm.test('Status code is 200', function () {",
+                              "    pm.response.to.have.status(200);",
+                              "})",
+                              "",
+                              "pm.test('Transaction details are valid', function () {",
+                              "    const jsonData = pm.response.json();",
+                              "    pm.expect(jsonData).to.have.property('id');",
+                              "    pm.expect(jsonData).to.have.property('amount');",
+                              "    pm.expect(jsonData.amount).to.be.a('number');",
+                              "    pm.expect(jsonData).to.have.property('type');",
+                              "})",
+                              "",
+                              "pm.test('Transaction ID matches saved ID', function () {",
+                              "    const jsonData = pm.response.json();",
+                              "    const savedTransactionId = pm.collectionVariables.get('transactionId');",
+                              "    if (savedTransactionId) {",
+                              "        pm.expect(jsonData.id.toString()).to.equal(savedTransactionId.toString());",
+                              "    }",
+                              "})"
+                            ]
+                          }
+                        }
+                      ],
+                      "id": "e713a07b-4e9b-4d47-9e55-1b1a3cc9d4f6",
+                      "request": {
+                        "auth": {
+                          "type": "bearer",
+                          "bearer": [
+                            {
+                              "key": "token",
+                              "value": "{{bearerToken}}",
+                              "type": "string"
+                            }
+                          ]
+                        },
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/v1/transactions/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "v1",
+                            "transactions",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id",
+                              "value": "<number>",
+                              "description": "(Required) Transaction ID"
+                            }
+                          ]
+                        }
+                      },
+                      "response": [
+                        {
+                          "id": "c7bc0abb-94ad-48bb-87b7-7a274f9f8e8a",
+                          "name": "Transaction retrieved successfully",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Authorization",
+                                "value": "Bearer <token>",
+                                "description": "Added as a part of security scheme: bearer"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/api/v1/transactions/:id",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "v1",
+                                "transactions",
+                                ":id"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "id",
+                                  "value": "<number>",
+                                  "description": "(Required) Transaction ID"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "OK",
+                          "code": 200,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "body": "{\n  \"id\": \"<number>\",\n  \"amount\": \"<number>\",\n  \"type\": \"expense\",\n  \"categoryId\": \"<number>\",\n  \"category\": {\n    \"id\": \"<number>\",\n    \"name\": \"<string>\",\n    \"type\": \"income\",\n    \"icon\": {},\n    \"color\": {},\n    \"createdAt\": \"<dateTime>\",\n    \"updatedAt\": \"<dateTime>\"\n  },\n  \"transactionDate\": \"<dateTime>\",\n  \"note\": {},\n  \"createdAt\": \"<dateTime>\",\n  \"updatedAt\": \"<dateTime>\"\n}"
+                        },
+                        {
+                          "id": "17cbeb43-b8bd-46bf-8b64-39e66437fe8a",
+                          "name": "Transaction not found",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Authorization",
+                                "value": "Bearer <token>",
+                                "description": "Added as a part of security scheme: bearer"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/api/v1/transactions/:id",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "v1",
+                                "transactions",
+                                ":id"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "id",
+                                  "value": "<number>",
+                                  "description": "(Required) Transaction ID"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Not Found",
+                          "code": 404,
+                          "_postman_previewlanguage": "text",
+                          "header": [],
+                          "cookie": [],
+                          "body": ""
+                        }
+                      ]
+                    },
+                    {
+                      "name": "Update a transaction",
+                      "event": [
+                        {
+                          "listen": "test",
+                          "script": {
+                            "type": "text/javascript",
+                            "exec": [
+                              "pm.test('Status code is 200', function () {",
+                              "    pm.response.to.have.status(200);",
+                              "})",
+                              "",
+                              "pm.test('Updated data is reflected in response', function () {",
+                              "    const jsonData = pm.response.json();",
+                              "    pm.expect(jsonData).to.have.property('id');",
+                              "    pm.expect(jsonData).to.have.property('amount');",
+                              "    pm.expect(jsonData.amount).to.be.a('number');",
+                              "    pm.expect(jsonData).to.have.property('type');",
+                              "})"
+                            ]
+                          }
+                        }
+                      ],
+                      "id": "98e47e5f-ee18-4617-8c64-abcd88625f82",
+                      "request": {
+                        "auth": {
+                          "type": "bearer",
+                          "bearer": [
+                            {
+                              "key": "token",
+                              "value": "{{bearerToken}}",
+                              "type": "string"
+                            }
+                          ]
+                        },
+                        "method": "PATCH",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"amount\": \"<number>\",\n  \"type\": \"expense\",\n  \"categoryId\": \"<number>\",\n  \"transactionDate\": \"<string>\",\n  \"note\": \"<string>\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/v1/transactions/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "v1",
+                            "transactions",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id",
+                              "value": "<number>",
+                              "description": "(Required) Transaction ID"
+                            }
+                          ]
+                        }
+                      },
+                      "response": [
+                        {
+                          "id": "61ca077f-da52-4791-9546-6c266fbe89d6",
+                          "name": "Transaction successfully updated",
+                          "originalRequest": {
+                            "method": "PATCH",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Authorization",
+                                "value": "Bearer <token>",
+                                "description": "Added as a part of security scheme: bearer"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"amount\": \"<number>\",\n  \"type\": \"expense\",\n  \"categoryId\": \"<number>\",\n  \"transactionDate\": \"<string>\",\n  \"note\": \"<string>\"\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/api/v1/transactions/:id",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "v1",
+                                "transactions",
+                                ":id"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "id",
+                                  "value": "<number>",
+                                  "description": "(Required) Transaction ID"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "OK",
+                          "code": 200,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "body": "{\n  \"id\": \"<number>\",\n  \"amount\": \"<number>\",\n  \"type\": \"expense\",\n  \"categoryId\": \"<number>\",\n  \"category\": {\n    \"id\": \"<number>\",\n    \"name\": \"<string>\",\n    \"type\": \"income\",\n    \"icon\": {},\n    \"color\": {},\n    \"createdAt\": \"<dateTime>\",\n    \"updatedAt\": \"<dateTime>\"\n  },\n  \"transactionDate\": \"<dateTime>\",\n  \"note\": {},\n  \"createdAt\": \"<dateTime>\",\n  \"updatedAt\": \"<dateTime>\"\n}"
+                        },
+                        {
+                          "id": "5317977c-c9b0-4742-8799-84333f35bf1d",
+                          "name": "Invalid transaction data (amount <= 0, future date, type mismatch)",
+                          "originalRequest": {
+                            "method": "PATCH",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Authorization",
+                                "value": "Bearer <token>",
+                                "description": "Added as a part of security scheme: bearer"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"amount\": \"<number>\",\n  \"type\": \"expense\",\n  \"categoryId\": \"<number>\",\n  \"transactionDate\": \"<string>\",\n  \"note\": \"<string>\"\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/api/v1/transactions/:id",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "v1",
+                                "transactions",
+                                ":id"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "id",
+                                  "value": "<number>",
+                                  "description": "(Required) Transaction ID"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Bad Request",
+                          "code": 400,
+                          "_postman_previewlanguage": "text",
+                          "header": [],
+                          "cookie": [],
+                          "body": ""
+                        },
+                        {
+                          "id": "f1a5d6c9-1450-453d-95ee-14eb5d2709d4",
+                          "name": "Transaction or category not found",
+                          "originalRequest": {
+                            "method": "PATCH",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Authorization",
+                                "value": "Bearer <token>",
+                                "description": "Added as a part of security scheme: bearer"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"amount\": \"<number>\",\n  \"type\": \"expense\",\n  \"categoryId\": \"<number>\",\n  \"transactionDate\": \"<string>\",\n  \"note\": \"<string>\"\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/api/v1/transactions/:id",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "v1",
+                                "transactions",
+                                ":id"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "id",
+                                  "value": "<number>",
+                                  "description": "(Required) Transaction ID"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Not Found",
+                          "code": 404,
+                          "_postman_previewlanguage": "text",
+                          "header": [],
+                          "cookie": [],
+                          "body": ""
+                        }
+                      ]
+                    },
+                    {
+                      "name": "Delete a transaction",
+                      "event": [
+                        {
+                          "listen": "test",
+                          "script": {
+                            "type": "text/javascript",
+                            "exec": [
+                              "pm.test('Status code is 200 or 204', function () {",
+                              "    pm.expect(pm.response.code).to.be.oneOf([",
+                              "        200,",
+                              "        204",
+                              "    ]);",
+                              "})",
+                              "",
+                              "pm.test('Verify successful deletion', function () {",
+                              "    if (pm.response.code === 200) {",
+                              "        const jsonData = pm.response.json();",
+                              "        const hasSuccessIndicator = jsonData.message || jsonData.success || jsonData.deleted;",
+                              "        pm.expect(hasSuccessIndicator).to.exist;",
+                              "    } else {",
+                              "        pm.expect(pm.response.code).to.equal(204);",
+                              "    }",
+                              "})"
+                            ]
+                          }
+                        }
+                      ],
+                      "id": "c1c938a6-5324-4904-90a2-e6a660467ce0",
+                      "request": {
+                        "auth": {
+                          "type": "bearer",
+                          "bearer": [
+                            {
+                              "key": "token",
+                              "value": "{{bearerToken}}",
+                              "type": "string"
+                            }
+                          ]
+                        },
+                        "method": "DELETE",
+                        "header": [],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/v1/transactions/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "v1",
+                            "transactions",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id",
+                              "value": "<number>",
+                              "description": "(Required) Transaction ID"
+                            }
+                          ]
+                        }
+                      },
+                      "response": [
+                        {
+                          "id": "05023a88-f789-4c12-a4be-c72c9f45d5e9",
+                          "name": "Transaction successfully deleted",
+                          "originalRequest": {
+                            "method": "DELETE",
+                            "header": [
+                              {
+                                "key": "Authorization",
+                                "value": "Bearer <token>",
+                                "description": "Added as a part of security scheme: bearer"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/api/v1/transactions/:id",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "v1",
+                                "transactions",
+                                ":id"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "id",
+                                  "value": "<number>",
+                                  "description": "(Required) Transaction ID"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "No Content",
+                          "code": 204,
+                          "_postman_previewlanguage": "text",
+                          "header": [],
+                          "cookie": [],
+                          "body": ""
+                        },
+                        {
+                          "id": "93a1a8e6-fd5b-4976-ba25-b0546f7f0378",
+                          "name": "Transaction not found",
+                          "originalRequest": {
+                            "method": "DELETE",
+                            "header": [
+                              {
+                                "key": "Authorization",
+                                "value": "Bearer <token>",
+                                "description": "Added as a part of security scheme: bearer"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/api/v1/transactions/:id",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "v1",
+                                "transactions",
+                                ":id"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "id",
+                                  "value": "<number>",
+                                  "description": "(Required) Transaction ID"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Not Found",
+                          "code": 404,
+                          "_postman_previewlanguage": "text",
+                          "header": [],
+                          "cookie": [],
+                          "body": ""
+                        }
+                      ]
+                    }
+                  ],
+                  "id": "e81e43ff-f769-4776-a930-b0379b32eecf"
+                },
+                {
+                  "name": "Create a new transaction",
+                  "event": [
+                    {
+                      "listen": "test",
+                      "script": {
+                        "type": "text/javascript",
+                        "exec": [
+                          "pm.test('Status code is 201', function () {",
+                          "    pm.response.to.have.status(201);",
+                          "})",
+                          "",
+                          "pm.test('Save transaction ID to collection variable', function () {",
+                          "    const jsonData = pm.response.json();",
+                          "    if (jsonData.id) {",
+                          "        pm.collectionVariables.set('transactionId', jsonData.id);",
+                          "    }",
+                          "    pm.expect(true).to.be.true;",
+                          "})",
+                          "",
+                          "pm.test('Response has amount, type, and category fields', function () {",
+                          "    const jsonData = pm.response.json();",
+                          "    pm.expect(jsonData).to.have.property('amount');",
+                          "    pm.expect(jsonData.amount).to.be.a('number');",
+                          "    pm.expect(jsonData).to.have.property('type');",
+                          "    pm.expect([",
+                          "        'income',",
+                          "        'expense'",
+                          "    ]).to.include(jsonData.type);",
+                          "    const hasCategory = jsonData.category !== undefined || jsonData.categoryId !== undefined;",
+                          "    pm.expect(hasCategory).to.be.true;",
+                          "})"
+                        ]
+                      }
+                    }
+                  ],
+                  "id": "2aac585a-74c4-469a-a64d-0f7adbd6854a",
+                  "request": {
+                    "auth": {
+                      "type": "bearer",
+                      "bearer": [
+                        {
+                          "key": "token",
+                          "value": "{{bearerToken}}",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"amount\": \"<number>\",\n  \"type\": \"expense\",\n  \"categoryId\": \"<number>\",\n  \"transactionDate\": \"<string>\",\n  \"note\": \"<string>\"\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/api/v1/transactions",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "v1",
+                        "transactions"
+                      ]
+                    }
+                  },
+                  "response": [
+                    {
+                      "id": "69fd0a25-1705-4eb8-9f6a-f7a45295bf14",
+                      "name": "Transaction successfully created",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Authorization",
+                            "value": "Bearer <token>",
+                            "description": "Added as a part of security scheme: bearer"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"amount\": \"<number>\",\n  \"type\": \"expense\",\n  \"categoryId\": \"<number>\",\n  \"transactionDate\": \"<string>\",\n  \"note\": \"<string>\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/v1/transactions",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "v1",
+                            "transactions"
+                          ]
+                        }
+                      },
+                      "status": "Created",
+                      "code": 201,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "body": "{\n  \"id\": \"<number>\",\n  \"amount\": \"<number>\",\n  \"type\": \"expense\",\n  \"categoryId\": \"<number>\",\n  \"category\": {\n    \"id\": \"<number>\",\n    \"name\": \"<string>\",\n    \"type\": \"income\",\n    \"icon\": {},\n    \"color\": {},\n    \"createdAt\": \"<dateTime>\",\n    \"updatedAt\": \"<dateTime>\"\n  },\n  \"transactionDate\": \"<dateTime>\",\n  \"note\": {},\n  \"createdAt\": \"<dateTime>\",\n  \"updatedAt\": \"<dateTime>\"\n}"
+                    },
+                    {
+                      "id": "278e39af-94cf-44ff-8ad7-06bdad22aaf1",
+                      "name": "Invalid transaction data (amount <= 0, future date, type mismatch)",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Authorization",
+                            "value": "Bearer <token>",
+                            "description": "Added as a part of security scheme: bearer"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"amount\": \"<number>\",\n  \"type\": \"expense\",\n  \"categoryId\": \"<number>\",\n  \"transactionDate\": \"<string>\",\n  \"note\": \"<string>\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/v1/transactions",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "v1",
+                            "transactions"
+                          ]
+                        }
+                      },
+                      "status": "Bad Request",
+                      "code": 400,
+                      "_postman_previewlanguage": "text",
+                      "header": [],
+                      "cookie": [],
+                      "body": ""
+                    },
+                    {
+                      "id": "a5238fe2-bf1d-4333-b260-c6ec39cc2f25",
+                      "name": "Category not found",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Authorization",
+                            "value": "Bearer <token>",
+                            "description": "Added as a part of security scheme: bearer"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"amount\": \"<number>\",\n  \"type\": \"expense\",\n  \"categoryId\": \"<number>\",\n  \"transactionDate\": \"<string>\",\n  \"note\": \"<string>\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/v1/transactions",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "v1",
+                            "transactions"
+                          ]
+                        }
+                      },
+                      "status": "Not Found",
+                      "code": 404,
+                      "_postman_previewlanguage": "text",
+                      "header": [],
+                      "cookie": [],
+                      "body": ""
+                    }
+                  ]
+                },
+                {
+                  "name": "List all transactions for the authenticated user",
+                  "event": [
+                    {
+                      "listen": "test",
+                      "script": {
+                        "type": "text/javascript",
+                        "exec": [
+                          "pm.test('Status code is 200', function () {",
+                          "    pm.response.to.have.status(200);",
+                          "})",
+                          "",
+                          "pm.test('Response is an array', function () {",
+                          "    const jsonData = pm.response.json();",
+                          "    const transactions = Array.isArray(jsonData) ? jsonData : jsonData.data || jsonData.transactions;",
+                          "    pm.expect(transactions).to.be.an('array');",
+                          "})",
+                          "",
+                          "pm.test('Transaction structure is valid', function () {",
+                          "    const jsonData = pm.response.json();",
+                          "    const transactions = Array.isArray(jsonData) ? jsonData : jsonData.data || jsonData.transactions;",
+                          "    if (transactions && transactions.length > 0) {",
+                          "        transactions.forEach(function (transaction) {",
+                          "            pm.expect(transaction).to.have.property('id');",
+                          "            pm.expect(transaction).to.have.property('amount');",
+                          "            pm.expect(transaction).to.have.property('type');",
+                          "        });",
+                          "    }",
+                          "})"
+                        ]
+                      }
+                    }
+                  ],
+                  "id": "f9a23ead-4e94-4ae1-9f3e-29f6c555715f",
+                  "request": {
+                    "auth": {
+                      "type": "bearer",
+                      "bearer": [
+                        {
+                          "key": "token",
+                          "value": "{{bearerToken}}",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/v1/transactions?type=expense&startDate=<string>&endDate=<string>",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "v1",
+                        "transactions"
+                      ],
+                      "query": [
+                        {
+                          "key": "type",
+                          "value": "expense",
+                          "description": "Filter by transaction type (This can only be one of income,expense)"
+                        },
+                        {
+                          "key": "startDate",
+                          "value": "<string>",
+                          "description": "Start date (YYYY-MM-DD)"
+                        },
+                        {
+                          "key": "endDate",
+                          "value": "<string>",
+                          "description": "End date (YYYY-MM-DD)"
+                        }
+                      ]
+                    }
+                  },
+                  "response": [
+                    {
+                      "id": "94b132e0-fd10-4a53-977a-9145b6d10e06",
+                      "name": "Transactions retrieved successfully",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Authorization",
+                            "value": "Bearer <token>",
+                            "description": "Added as a part of security scheme: bearer"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/v1/transactions?type=expense&startDate=<string>&endDate=<string>",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "v1",
+                            "transactions"
+                          ],
+                          "query": [
+                            {
+                              "key": "type",
+                              "value": "expense",
+                              "description": "Filter by transaction type (This can only be one of income,expense)"
+                            },
+                            {
+                              "key": "startDate",
+                              "value": "<string>",
+                              "description": "Start date (YYYY-MM-DD)"
+                            },
+                            {
+                              "key": "endDate",
+                              "value": "<string>",
+                              "description": "End date (YYYY-MM-DD)"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "body": "[\n  {\n    \"id\": \"<number>\",\n    \"amount\": \"<number>\",\n    \"type\": \"expense\",\n    \"categoryId\": \"<number>\",\n    \"category\": {\n      \"id\": \"<number>\",\n      \"name\": \"<string>\",\n      \"type\": \"income\",\n      \"icon\": {},\n      \"color\": {},\n      \"createdAt\": \"<dateTime>\",\n      \"updatedAt\": \"<dateTime>\"\n    },\n    \"transactionDate\": \"<dateTime>\",\n    \"note\": {},\n    \"createdAt\": \"<dateTime>\",\n    \"updatedAt\": \"<dateTime>\"\n  },\n  {\n    \"id\": \"<number>\",\n    \"amount\": \"<number>\",\n    \"type\": \"income\",\n    \"categoryId\": \"<number>\",\n    \"category\": {\n      \"id\": \"<number>\",\n      \"name\": \"<string>\",\n      \"type\": \"expense\",\n      \"icon\": {},\n      \"color\": {},\n      \"createdAt\": \"<dateTime>\",\n      \"updatedAt\": \"<dateTime>\"\n    },\n    \"transactionDate\": \"<dateTime>\",\n    \"note\": {},\n    \"createdAt\": \"<dateTime>\",\n    \"updatedAt\": \"<dateTime>\"\n  }\n]"
+                    }
+                  ]
+                }
+              ],
+              "id": "6ae64019-5de8-43b9-a1e9-20657df55b36"
+            },
+            {
+              "name": "audit-logs",
+              "item": [
+                {
+                  "name": "Get audit logs for the current user",
+                  "event": [
+                    {
+                      "listen": "test",
+                      "script": {
+                        "type": "text/javascript",
+                        "exec": [
+                          "pm.test('Status code is 200', function () {",
+                          "    pm.response.to.have.status(200);",
+                          "})",
+                          "",
+                          "pm.test('Response contains logs array', function () {",
+                          "    const jsonData = pm.response.json();",
+                          "    const logs = Array.isArray(jsonData) ? jsonData : jsonData.data || jsonData.logs;",
+                          "    pm.expect(logs).to.be.an('array');",
+                          "})",
+                          "",
+                          "pm.test('Log entry fields are valid', function () {",
+                          "    const jsonData = pm.response.json();",
+                          "    const logs = Array.isArray(jsonData) ? jsonData : jsonData.data || jsonData.logs;",
+                          "    if (logs && logs.length > 0) {",
+                          "        logs.forEach(function (log) {",
+                          "            pm.expect(log).to.have.property('id');",
+                          "            const hasAction = log.action !== undefined || log.type !== undefined || log.event !== undefined;",
+                          "            pm.expect(hasAction).to.be.true;",
+                          "        });",
+                          "    }",
+                          "})"
+                        ]
+                      }
+                    }
+                  ],
+                  "id": "171a6e8a-22f8-45c6-99b3-07df732123e8",
+                  "request": {
+                    "auth": {
+                      "type": "bearer",
+                      "bearer": [
+                        {
+                          "key": "token",
+                          "value": "{{bearerToken}}",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/v1/audit-logs?entityType=transaction&action=UPDATE&entityId=<number>&page=1&limit=20",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "v1",
+                        "audit-logs"
+                      ],
+                      "query": [
+                        {
+                          "key": "entityType",
+                          "value": "transaction",
+                          "description": "Entity type to filter by (This can only be one of transaction)"
+                        },
+                        {
+                          "key": "action",
+                          "value": "UPDATE",
+                          "description": "Action to filter by (This can only be one of CREATE,UPDATE,DELETE)"
+                        },
+                        {
+                          "key": "entityId",
+                          "value": "<number>",
+                          "description": "Entity ID to filter by"
+                        },
+                        {
+                          "key": "page",
+                          "value": "1",
+                          "description": "Page number (1-based)"
+                        },
+                        {
+                          "key": "limit",
+                          "value": "20",
+                          "description": "Number of items per page"
+                        }
+                      ]
+                    }
+                  },
+                  "response": [
+                    {
+                      "id": "f0f7a926-35c2-4cdc-898f-7e4d1bc0ada8",
+                      "name": "Audit logs retrieved successfully",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Authorization",
+                            "value": "Bearer <token>",
+                            "description": "Added as a part of security scheme: bearer"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/v1/audit-logs?entityType=transaction&action=UPDATE&entityId=<number>&page=1&limit=20",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "v1",
+                            "audit-logs"
+                          ],
+                          "query": [
+                            {
+                              "key": "entityType",
+                              "value": "transaction",
+                              "description": "Entity type to filter by (This can only be one of transaction)"
+                            },
+                            {
+                              "key": "action",
+                              "value": "UPDATE",
+                              "description": "Action to filter by (This can only be one of CREATE,UPDATE,DELETE)"
+                            },
+                            {
+                              "key": "entityId",
+                              "value": "<number>",
+                              "description": "Entity ID to filter by"
+                            },
+                            {
+                              "key": "page",
+                              "value": "1",
+                              "description": "Page number (1-based)"
+                            },
+                            {
+                              "key": "limit",
+                              "value": "20",
+                              "description": "Number of items per page"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "body": "{\n  \"data\": [\n    {\n      \"id\": \"<string>\",\n      \"userId\": \"<number>\",\n      \"entityType\": \"transaction\",\n      \"entityId\": \"<number>\",\n      \"action\": \"CREATE\",\n      \"beforeData\": {},\n      \"afterData\": {},\n      \"createdAt\": \"<dateTime>\"\n    },\n    {\n      \"id\": \"<string>\",\n      \"userId\": \"<number>\",\n      \"entityType\": \"transaction\",\n      \"entityId\": \"<number>\",\n      \"action\": \"UPDATE\",\n      \"beforeData\": {},\n      \"afterData\": {},\n      \"createdAt\": \"<dateTime>\"\n    }\n  ],\n  \"total\": \"<number>\",\n  \"page\": \"<number>\",\n  \"limit\": \"<number>\",\n  \"totalPages\": \"<number>\"\n}"
+                    },
+                    {
+                      "id": "f0033795-c12f-4802-ad88-7a45703faeb6",
+                      "name": "Unauthorized",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Authorization",
+                            "value": "Bearer <token>",
+                            "description": "Added as a part of security scheme: bearer"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/v1/audit-logs?entityType=transaction&action=UPDATE&entityId=<number>&page=1&limit=20",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "v1",
+                            "audit-logs"
+                          ],
+                          "query": [
+                            {
+                              "key": "entityType",
+                              "value": "transaction",
+                              "description": "Entity type to filter by (This can only be one of transaction)"
+                            },
+                            {
+                              "key": "action",
+                              "value": "UPDATE",
+                              "description": "Action to filter by (This can only be one of CREATE,UPDATE,DELETE)"
+                            },
+                            {
+                              "key": "entityId",
+                              "value": "<number>",
+                              "description": "Entity ID to filter by"
+                            },
+                            {
+                              "key": "page",
+                              "value": "1",
+                              "description": "Page number (1-based)"
+                            },
+                            {
+                              "key": "limit",
+                              "value": "20",
+                              "description": "Number of items per page"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Unauthorized",
+                      "code": 401,
+                      "_postman_previewlanguage": "text",
+                      "header": [],
+                      "cookie": [],
+                      "body": ""
+                    },
+                    {
+                      "id": "681c83ab-32cd-4181-9960-641e81d476d8",
+                      "name": "Internal server error",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Authorization",
+                            "value": "Bearer <token>",
+                            "description": "Added as a part of security scheme: bearer"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/v1/audit-logs?entityType=transaction&action=UPDATE&entityId=<number>&page=1&limit=20",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "v1",
+                            "audit-logs"
+                          ],
+                          "query": [
+                            {
+                              "key": "entityType",
+                              "value": "transaction",
+                              "description": "Entity type to filter by (This can only be one of transaction)"
+                            },
+                            {
+                              "key": "action",
+                              "value": "UPDATE",
+                              "description": "Action to filter by (This can only be one of CREATE,UPDATE,DELETE)"
+                            },
+                            {
+                              "key": "entityId",
+                              "value": "<number>",
+                              "description": "Entity ID to filter by"
+                            },
+                            {
+                              "key": "page",
+                              "value": "1",
+                              "description": "Page number (1-based)"
+                            },
+                            {
+                              "key": "limit",
+                              "value": "20",
+                              "description": "Number of items per page"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Internal Server Error",
+                      "code": 500,
+                      "_postman_previewlanguage": "text",
+                      "header": [],
+                      "cookie": [],
+                      "body": ""
+                    }
+                  ]
+                }
+              ],
+              "id": "5295df7b-6ed9-4004-9570-b89d7c1360b5"
+            },
+            {
+              "name": "summary",
+              "item": [
+                {
+                  "name": "monthly",
+                  "item": [
+                    {
+                      "name": "Get monthly financial summary",
+                      "event": [
+                        {
+                          "listen": "test",
+                          "script": {
+                            "type": "text/javascript",
+                            "exec": [
+                              "pm.test('Status code is 200', function () {",
+                              "    pm.response.to.have.status(200);",
+                              "})",
+                              "",
+                              "pm.test('Summary structure is valid (income, expenses, balance)', function () {",
+                              "    const jsonData = pm.response.json();",
+                              "    const hasIncome = jsonData.income !== undefined || jsonData.totalIncome !== undefined;",
+                              "    const hasExpenses = jsonData.expenses !== undefined || jsonData.totalExpenses !== undefined || jsonData.expense !== undefined;",
+                              "    const hasBalance = jsonData.balance !== undefined || jsonData.netBalance !== undefined || jsonData.net !== undefined;",
+                              "    pm.expect(hasIncome || hasExpenses || hasBalance).to.be.true;",
+                              "})",
+                              "",
+                              "pm.test('Numeric values are valid', function () {",
+                              "    const jsonData = pm.response.json();",
+                              "    const numericFields = [",
+                              "        'income',",
+                              "        'totalIncome',",
+                              "        'expenses',",
+                              "        'totalExpenses',",
+                              "        'expense',",
+                              "        'balance',",
+                              "        'netBalance',",
+                              "        'net'",
+                              "    ];",
+                              "    numericFields.forEach(function (field) {",
+                              "        if (jsonData[field] !== undefined) {",
+                              "            pm.expect(jsonData[field]).to.be.a('number');",
+                              "        }",
+                              "    });",
+                              "})"
+                            ]
+                          }
+                        }
+                      ],
+                      "id": "85e26708-0aa9-499b-9d7c-8c47e33508a3",
+                      "request": {
+                        "auth": {
+                          "type": "bearer",
+                          "bearer": [
+                            {
+                              "key": "token",
+                              "value": "{{bearerToken}}",
+                              "type": "string"
+                            }
+                          ]
+                        },
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/v1/summary/monthly?year=<number>&month=<number>",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "v1",
+                            "summary",
+                            "monthly"
+                          ],
+                          "query": [
+                            {
+                              "key": "year",
+                              "value": "<number>",
+                              "description": "(Required) Calendar year (e.g. 2026)"
+                            },
+                            {
+                              "key": "month",
+                              "value": "<number>",
+                              "description": "(Required) Month (1-12)"
+                            }
+                          ]
+                        }
+                      },
+                      "response": [
+                        {
+                          "id": "77800d8b-44b7-4a85-b225-3b1fc07eda87",
+                          "name": "Monthly summary retrieved successfully",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Authorization",
+                                "value": "Bearer <token>",
+                                "description": "Added as a part of security scheme: bearer"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/api/v1/summary/monthly?year=<number>&month=<number>",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "v1",
+                                "summary",
+                                "monthly"
+                              ],
+                              "query": [
+                                {
+                                  "key": "year",
+                                  "value": "<number>",
+                                  "description": "(Required) Calendar year (e.g. 2026)"
+                                },
+                                {
+                                  "key": "month",
+                                  "value": "<number>",
+                                  "description": "(Required) Month (1-12)"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "OK",
+                          "code": 200,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "body": "{\n  \"year\": \"<number>\",\n  \"month\": \"<number>\",\n  \"totalIncome\": \"<number>\",\n  \"totalExpense\": \"<number>\",\n  \"balance\": \"<number>\",\n  \"expenseByCategory\": [\n    {\n      \"categoryId\": \"<number>\",\n      \"categoryName\": \"<string>\",\n      \"totalAmount\": \"<number>\",\n      \"percentage\": \"<number>\"\n    },\n    {\n      \"categoryId\": \"<number>\",\n      \"categoryName\": \"<string>\",\n      \"totalAmount\": \"<number>\",\n      \"percentage\": \"<number>\"\n    }\n  ]\n}"
+                        },
+                        {
+                          "id": "68b3d888-9a33-4360-9458-916b9ed0e3e1",
+                          "name": "Invalid month parameter",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Authorization",
+                                "value": "Bearer <token>",
+                                "description": "Added as a part of security scheme: bearer"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/api/v1/summary/monthly?year=<number>&month=<number>",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "v1",
+                                "summary",
+                                "monthly"
+                              ],
+                              "query": [
+                                {
+                                  "key": "year",
+                                  "value": "<number>",
+                                  "description": "(Required) Calendar year (e.g. 2026)"
+                                },
+                                {
+                                  "key": "month",
+                                  "value": "<number>",
+                                  "description": "(Required) Month (1-12)"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Bad Request",
+                          "code": 400,
+                          "_postman_previewlanguage": "text",
+                          "header": [],
+                          "cookie": [],
+                          "body": ""
+                        },
+                        {
+                          "id": "417d16bc-1b28-4b59-b95f-faba78b792ce",
+                          "name": "Unauthorized",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Authorization",
+                                "value": "Bearer <token>",
+                                "description": "Added as a part of security scheme: bearer"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/api/v1/summary/monthly?year=<number>&month=<number>",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "v1",
+                                "summary",
+                                "monthly"
+                              ],
+                              "query": [
+                                {
+                                  "key": "year",
+                                  "value": "<number>",
+                                  "description": "(Required) Calendar year (e.g. 2026)"
+                                },
+                                {
+                                  "key": "month",
+                                  "value": "<number>",
+                                  "description": "(Required) Month (1-12)"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Unauthorized",
+                          "code": 401,
+                          "_postman_previewlanguage": "text",
+                          "header": [],
+                          "cookie": [],
+                          "body": ""
+                        },
+                        {
+                          "id": "a5dc0946-a0c9-44dc-8009-9034564c873c",
+                          "name": "Internal server error",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Authorization",
+                                "value": "Bearer <token>",
+                                "description": "Added as a part of security scheme: bearer"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/api/v1/summary/monthly?year=<number>&month=<number>",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "v1",
+                                "summary",
+                                "monthly"
+                              ],
+                              "query": [
+                                {
+                                  "key": "year",
+                                  "value": "<number>",
+                                  "description": "(Required) Calendar year (e.g. 2026)"
+                                },
+                                {
+                                  "key": "month",
+                                  "value": "<number>",
+                                  "description": "(Required) Month (1-12)"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Internal Server Error",
+                          "code": 500,
+                          "_postman_previewlanguage": "text",
+                          "header": [],
+                          "cookie": [],
+                          "body": ""
+                        }
+                      ]
+                    }
+                  ],
+                  "id": "a832551e-f254-4515-a225-5309370e78fc"
+                }
+              ],
+              "id": "d2e91959-454d-4a88-88fd-8e11bcf801c1"
+            },
+            {
+              "name": "Health check endpoint",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('Status code is 200', function () {",
+                      "    pm.response.to.have.status(200);",
+                      "})",
+                      "",
+                      "pm.test('API is healthy', function () {",
+                      "    const jsonData = pm.response.json();",
+                      "    const isHealthy = jsonData.status === 'ok' || jsonData.status === 'healthy' || jsonData.healthy === true || jsonData.success === true || pm.response.code === 200;",
+                      "    pm.expect(isHealthy).to.be.true;",
+                      "})"
+                    ]
+                  }
+                }
+              ],
+              "id": "ce3ac049-8042-4358-bfa2-f8d012a56e61",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v1",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1"
+                  ]
+                }
+              },
+              "response": [
+                {
+                  "id": "94542f22-ad01-4353-b441-7b7ab162770b",
+                  "name": "Returns a welcome message",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/v1",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "v1"
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "text",
+                  "header": [],
+                  "cookie": [],
+                  "body": ""
+                }
+              ]
+            }
+          ],
+          "id": "ad4921e2-22b9-4860-8fe6-abfb5a39d376"
+        }
+      ],
+      "id": "9e8567d2-ed63-478d-b234-5f0a8fc88d1f"
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "id": "7e56d455-99a1-4833-881b-e354475e2086",
+        "type": "text/javascript",
+        "requests": {},
+        "exec": [
+          "// Collection-level pre-request script",
+          "// Set up common variables and headers needed across all requests",
+          "",
+          "// Generate a unique timestamp for test data",
+          "const timestamp = Date.now();",
+          "pm.collectionVariables.set(\"timestamp\", timestamp);",
+          "",
+          "// Set default content type if not already set",
+          "if (!pm.request.headers.has(\"Content-Type\")) {",
+          "    pm.request.headers.add({",
+          "        key: \"Content-Type\",",
+          "        value: \"application/json\"",
+          "    });",
+          "}",
+          "",
+          "// Add Authorization header if accessToken exists and request is not auth-related",
+          "const accessToken = pm.collectionVariables.get(\"accessToken\");",
+          "const requestUrl = pm.request.url.toString();",
+          "",
+          "if (accessToken && !requestUrl.includes(\"/auth/login\") && !requestUrl.includes(\"/auth/register\")) {",
+          "    pm.request.headers.upsert({",
+          "        key: \"Authorization\",",
+          "        value: \"Bearer \" + accessToken",
+          "    });",
+          "}"
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "id": "8cddfc40-2075-4c00-bea4-125b4dde2be6",
+        "type": "text/javascript",
+        "requests": {},
+        "exec": [
+          "// Collection-level test script",
+          "// These tests run after every request in the collection",
+          "",
+          "pm.test(\"Response time is under 2000ms\", function () {",
+          "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+          "});",
+          "",
+          "pm.test(\"Response has proper Content-Type header\", function () {",
+          "    const contentType = pm.response.headers.get(\"Content-Type\");",
+          "    pm.expect(contentType).to.exist;",
+          "    pm.expect(contentType).to.include(\"application/json\");",
+          "});"
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "id": "94a8e0c1-feae-48f4-99fd-972570400c48",
+      "key": "baseUrl",
+      "value": "/"
+    },
+    {
+      "id": "d3260a22-bbd6-48c2-bf49-306682e77434",
+      "key": "timestamp",
+      "value": ""
+    },
+    {
+      "id": "79683e1a-66e0-4b07-b8d0-c0e6e03c6138",
+      "key": "bearerToken",
+      "value": ""
+    }
+  ]
+}

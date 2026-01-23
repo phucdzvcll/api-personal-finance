@@ -28,6 +28,13 @@ export class TransactionResponseDto {
   @ApiProperty({ description: "Optional note", example: "Lunch at restaurant", nullable: true })
   note: string | null;
 
+  @ApiProperty({
+    description: "Attachment file URL (image or document)",
+    example: "/uploads/transactions/1234567890-abc123.jpg",
+    nullable: true,
+  })
+  attachmentUrl: string | null;
+
   @ApiProperty({ description: "Transaction creation date" })
   createdAt: Date;
 

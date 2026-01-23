@@ -42,4 +42,13 @@ export class CreateTransactionDto {
   @IsOptional()
   @IsString()
   note?: string;
+
+  @ApiProperty({
+    description: "Attachment file URL (set automatically after file upload)",
+    example: "/uploads/transactions/1234567890-abc123.jpg",
+    required: false,
+  })
+  @IsOptional()
+  @IsString()
+  attachmentUrl?: string;
 }

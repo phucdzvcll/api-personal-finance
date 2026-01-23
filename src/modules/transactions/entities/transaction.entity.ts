@@ -33,6 +33,9 @@ export class TransactionEntity {
   @Column({ type: "text", nullable: true })
   note: string | null;
 
+  @Column({ name: "attachment_url", type: "varchar", nullable: true })
+  attachmentUrl: string | null;
+
   @CreateDateColumn({ name: "created_at" })
   createdAt: Date;
 
